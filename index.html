@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'Oracolo degli Arcani — Cartomanzia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night: #0B0E14;
+    --night-deep: #060810;
+    --plum: #1A1530;
+    --amethyst: #3D2645;
+    --gold: #D4AF6A;
+    --gold-bright: #E9CC8F;
+    --blood: #7A1F2B;
+    --parchment: #E8E3D8;
+    --parchment-dim: #B7AF9C;
+    --line: rgba(212,175,106,0.25);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(122,31,43,0.18), transparent 50%),
+      radial-gradient(ellipse at 85% 10%, rgba(61,38,69,0.35), transparent 45%),
+      var(--night);
+    color: var(--parchment);
+    font-family:'Crimson Text', serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  /* subtle star texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(232,227,216,0.5) 0, transparent 100%),
+      radial-gradient(1px 1px at 80% 15%, rgba(232,227,216,0.4) 0, transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 70%, rgba(212,175,106,0.4) 0, transparent 100%),
+      radial-gradient(1px 1px at 30% 85%, rgba(232,227,216,0.3) 0, transparent 100%),
+      radial-gradient(1px 1px at 92% 60%, rgba(232,227,216,0.4) 0, transparent 100%),
+      radial-gradient(1.5px 1.5px at 45% 40%, rgba(212,175,106,0.3) 0, transparent 100%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .eyebrow{
+    font-family:'Cinzel', serif;
+    letter-spacing:0.32em;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    color: var(--gold);
+    opacity:0.85;
+  }
+
+  h1,h2,h3{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    color: var(--parchment);
+  }
+
+  a{color:inherit;}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    z-index:1;
+    min-height:92vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 6vh 1.5rem 4vh;
+  }
+
+  .hero-ring{
+    width:120px; height:120px;
+    margin-bottom:2rem;
+    opacity:0;
+    animation: fadeUp 1.2s ease forwards 0.2s;
+  }
+
+  .hero h1{
+    font-size:clamp(2.6rem, 7vw, 5rem);
+    line-height:1.05;
+    letter-spacing:0.01em;
+    max-width:16ch;
+    opacity:0;
+    animation: fadeUp 1.2s ease forwards 0.4s;
+  }
+
+  .hero h1 em{
+    font-style:italic;
+    color: var(--gold-bright);
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+
+  .hero p{
+    margin-top:1.4rem;
+    font-size:1.15rem;
+    color: var(--parchment-dim);
+    max-width:42ch;
+    font-style:italic;
+    opacity:0;
+    animation: fadeUp 1.2s ease forwards 0.65s;
+  }
+
+  .hero-cta{
+    margin-top:2.6rem;
+    display:flex;
+    gap:1rem;
+    flex-wrap:wrap;
+    justify-content:center;
+    opacity:0;
+    animation: fadeUp 1.2s ease forwards 0.9s;
+  }
+
+  .btn{
+    font-family:'Cinzel', serif;
+    font-size:0.78rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    padding:0.95rem 2rem;
+    border-radius:2px;
+    cursor:pointer;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--parchment);
+    transition: all 0.35s ease;
+  }
+  .btn:hover, .btn:focus-visible{
+    border-color:var(--gold);
+    color:var(--gold-bright);
+    box-shadow:0 0 24px rgba(212,175,106,0.15);
+  }
+  .btn.primary{
+    background: linear-gradient(180deg, var(--blood), #5e1620);
+    border-color: rgba(122,31,43,0.6);
+  }
+  .btn.primary:hover, .btn.primary:focus-visible{
+    border-color: var(--gold);
+    box-shadow:0 0 30px rgba(122,31,43,0.45);
+  }
+  .btn:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .divider{
+    width:100%;
+    max-width:1100px;
+    margin:0 auto;
+    height:1px;
+    background: linear-gradient(90deg, transparent, var(--line) 20%, var(--line) 80%, transparent);
+    position:relative;
+    z-index:1;
+  }
+  .divider::after{
+    content:"✦";
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    background:var(--night);
+    color:var(--gold);
+    padding:0 1rem;
+    font-size:0.9rem;
+  }
+
+  /* ===== PAYWALL ===== */
+  .paywall{
+    position:relative; z-index:1;
+    max-width:920px;
+    margin:0 auto;
+    padding: 5rem 1.5rem;
+  }
+  .offers{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.5rem;
+    margin-top:2.8rem;
+  }
+  @media (max-width:680px){ .offers{ grid-template-columns:1fr; } }
+
+  .offer-card{
+    border:1px solid var(--line);
+    background: linear-gradient(160deg, rgba(61,38,69,0.35), rgba(11,14,20,0.4));
+    padding:2.2rem 1.8rem;
+    text-align:left;
+    display:flex;
+    flex-direction:column;
+  }
+  .offer-card.featured{
+    border-color: var(--gold);
+    box-shadow:0 0 0 1px var(--gold), 0 0 30px rgba(212,175,106,0.12);
+  }
+  .offer-tag{
+    font-family:'Cinzel',serif;
+    font-size:0.65rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  .offer-card h3{ font-size:1.5rem; margin-top:0.5rem; }
+  .offer-price{
+    font-family:'Cormorant Garamond',serif;
+    font-size:2.4rem;
+    color:var(--gold-bright);
+    margin-top:0.6rem;
+    font-weight:600;
+  }
+  .offer-price span{
+    font-size:1rem;
+    color:var(--parchment-dim);
+    font-family:'Crimson Text',serif;
+    font-style:italic;
+  }
+  .offer-card ul{
+    list-style:none;
+    margin-top:1.2rem;
+    display:flex;
+    flex-direction:column;
+    gap:0.5rem;
+    flex-grow:1;
+  }
+  .offer-card li{
+    color:var(--parchment-dim);
+    font-size:0.95rem;
+    padding-left:1.1rem;
+    position:relative;
+  }
+  .offer-card li::before{
+    content:"✦";
+    position:absolute; left:0; top:0;
+    color:var(--gold);
+    font-size:0.7rem;
+  }
+  .offer-card .btn{ margin-top:1.6rem; width:100%; }
+
+  .access-note{
+    margin-top:3rem;
+    padding-top:2.2rem;
+    border-top:1px solid var(--line);
+    text-align:center;
+  }
+  .access-note p{ color:var(--parchment-dim); font-style:italic; font-size:0.92rem; max-width:50ch; margin:0 auto 1.2rem; }
+  .access-form{
+    display:flex;
+    gap:0.7rem;
+    justify-content:center;
+    flex-wrap:wrap;
+    max-width:380px;
+    margin:0 auto;
+  }
+  .access-form input{
+    flex:1;
+    min-width:160px;
+    background:rgba(11,14,20,0.5);
+    border:1px solid var(--line);
+    color:var(--parchment);
+    font-family:'Cinzel',serif;
+    letter-spacing:0.1em;
+    text-align:center;
+    text-transform:uppercase;
+    font-size:0.9rem;
+    padding:0.8rem 1rem;
+  }
+  .access-form input:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; border-color:var(--gold); }
+  .access-error{
+    margin-top:0.8rem;
+    color:#E07A7A;
+    font-size:0.85rem;
+    font-style:italic;
+    opacity:0;
+    transition:opacity 0.3s ease;
+  }
+  .access-error.show{ opacity:1; }
+
+  .unlocked-banner{
+    display:none;
+    max-width:920px;
+    margin:0 auto;
+    padding: 0 1.5rem;
+    position:relative; z-index:1;
+  }
+  .unlocked-banner.show{ display:block; }
+  .unlocked-pill{
+    border:1px solid var(--gold);
+    background:rgba(212,175,106,0.08);
+    color:var(--gold-bright);
+    font-family:'Cinzel',serif;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    padding:0.7rem 1.2rem;
+    text-align:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:0.6rem;
+  }
+
+  #tirage.locked{ display:none; }
+  .table-felt.locked{ display:none; }
+
+  /* ===== SECTION: choix du tirage ===== */
+  .section{
+    position:relative; z-index:1;
+    max-width:1100px;
+    margin:0 auto;
+    padding: 5.5rem 1.5rem;
+  }
+
+  .section-head{
+    text-align:center;
+    margin-bottom:3rem;
+  }
+  .section-head h2{
+    font-size:clamp(1.9rem, 4vw, 2.6rem);
+    margin-top:0.6rem;
+  }
+  .section-head p{
+    color:var(--parchment-dim);
+    margin-top:0.8rem;
+    font-style:italic;
+    max-width:48ch;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .spreads{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.5rem;
+  }
+  @media (max-width:680px){ .spreads{ grid-template-columns:1fr; } }
+
+  .spread-card{
+    border:1px solid var(--line);
+    background: linear-gradient(160deg, rgba(61,38,69,0.35), rgba(11,14,20,0.4));
+    padding:2.2rem 1.8rem;
+    text-align:left;
+    cursor:pointer;
+    transition: all 0.35s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  .spread-card::before{
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(circle at 30% 0%, rgba(212,175,106,0.08), transparent 60%);
+    opacity:0;
+    transition:opacity 0.35s ease;
+  }
+  .spread-card:hover::before, .spread-card:focus-visible::before{ opacity:1; }
+  .spread-card:hover, .spread-card:focus-visible{
+    border-color:var(--gold);
+    transform:translateY(-3px);
+  }
+  .spread-card:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+  .spread-card.active{
+    border-color:var(--gold-bright);
+    box-shadow:0 0 0 1px var(--gold-bright), 0 0 30px rgba(212,175,106,0.18);
+  }
+
+  .spread-num{
+    font-family:'Cinzel',serif;
+    color:var(--gold);
+    font-size:0.75rem;
+    letter-spacing:0.2em;
+  }
+  .spread-card h3{ font-size:1.5rem; margin-top:0.5rem; }
+  .spread-card p{ color:var(--parchment-dim); margin-top:0.6rem; font-size:0.98rem; line-height:1.5; }
+
+  /* ===== TABLE DE TIRAGE ===== */
+  .table-felt{
+    position:relative; z-index:1;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(61,38,69,0.55), transparent 60%),
+      linear-gradient(180deg, var(--plum), var(--night-deep));
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding: 4.5rem 1.5rem 5.5rem;
+  }
+
+  .ritual-prompt{
+    text-align:center;
+    max-width:560px;
+    margin:0 auto 3rem;
+  }
+  .ritual-prompt h2{ font-size:clamp(1.7rem,3.6vw,2.2rem); }
+  .ritual-prompt p{ color:var(--parchment-dim); margin-top:0.7rem; font-style:italic; }
+
+  .question-input{
+    margin: 1.6rem auto 0;
+    max-width:480px;
+    display:flex;
+    flex-direction:column;
+    gap:0.6rem;
+  }
+  .question-input label{
+    font-family:'Cinzel',serif;
+    font-size:0.68rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--gold);
+    text-align:left;
+  }
+  .question-input input{
+    background:rgba(11,14,20,0.5);
+    border:1px solid var(--line);
+    color:var(--parchment);
+    font-family:'Crimson Text',serif;
+    font-style:italic;
+    font-size:1.05rem;
+    padding:0.85rem 1rem;
+  }
+  .question-input input:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; border-color:var(--gold); }
+  .question-input input::placeholder{ color:var(--parchment-dim); opacity:0.6; }
+
+  .draw-trigger{ text-align:center; margin-top:2.2rem; }
+
+  .cards-stage{
+    margin-top:4rem;
+    display:flex;
+    gap:2.2rem;
+    justify-content:center;
+    flex-wrap:wrap;
+    min-height:340px;
+  }
+
+  .card-slot{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1rem;
+  }
+
+  .card-position-label{
+    font-family:'Cinzel',serif;
+    font-size:0.7rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+    opacity:0;
+    transition:opacity 0.6s ease;
+  }
+  .card-position-label.show{ opacity:0.9; }
+
+  .tarot-card{
+    width:170px;
+    height:280px;
+    perspective:1400px;
+    opacity:0;
+    transform:translateY(40px) scale(0.92);
+  }
+  .tarot-card.dealt{
+    animation: dealCard 0.7s cubic-bezier(.2,.8,.25,1) forwards;
+  }
+  @keyframes dealCard{
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  .card-inner{
+    position:relative;
+    width:100%; height:100%;
+    transition: transform 0.9s cubic-bezier(.4,.2,.2,1);
+    transform-style:preserve-3d;
+    cursor:pointer;
+  }
+  .tarot-card.revealed .card-inner{ transform: rotateY(180deg); cursor:default; }
+
+  .card-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:6px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+
+  .card-back{
+    background:
+      repeating-linear-gradient(45deg, rgba(212,175,106,0.07) 0 2px, transparent 2px 14px),
+      linear-gradient(160deg, var(--amethyst), var(--night-deep));
+    border:1px solid var(--gold);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 0 6px rgba(11,14,20,0.4), inset 0 0 0 7px rgba(212,175,106,0.4);
+  }
+  .card-back .sigil{ width:54px; height:54px; opacity:0.85; }
+  .card-back::after{
+    content:"";
+    position:absolute; inset:14px;
+    border:1px solid rgba(212,175,106,0.35);
+    border-radius:3px;
+    pointer-events:none;
+  }
+
+  .card-front{
+    background: linear-gradient(165deg, #15101f, var(--night-deep));
+    border:1px solid var(--gold-bright);
+    transform: rotateY(180deg);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.55);
+    padding:0.9rem 0.8rem 0.7rem;
+    justify-content:flex-start;
+  }
+  .card-front .frame-line{
+    position:absolute; inset:8px;
+    border:1px solid rgba(212,175,106,0.4);
+    border-radius:3px;
+    pointer-events:none;
+  }
+  .card-front .card-glyph{
+    width:62px; height:62px;
+    margin-top:0.6rem;
+    color: var(--gold-bright);
+  }
+  .card-front .card-num{
+    font-family:'Cinzel',serif;
+    font-size:0.62rem;
+    letter-spacing:0.15em;
+    color:var(--gold);
+    margin-top:0.7rem;
+  }
+  .card-front .card-name{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:600;
+    font-size:1.15rem;
+    text-align:center;
+    margin-top:0.25rem;
+    padding:0 0.4rem;
+    line-height:1.15;
+  }
+  .card-front .card-keywords{
+    font-size:0.72rem;
+    color:var(--parchment-dim);
+    text-align:center;
+    margin-top:0.5rem;
+    font-style:italic;
+    padding:0 0.5rem;
+    line-height:1.3;
+  }
+
+  .tap-hint{
+    text-align:center;
+    color:var(--parchment-dim);
+    font-style:italic;
+    font-size:0.92rem;
+    margin-top:2.4rem;
+    opacity:0;
+    transition:opacity 0.6s ease;
+  }
+  .tap-hint.show{ opacity:0.75; }
+
+  /* ===== LECTURE / interprétation ===== */
+  .reading{
+    max-width:780px;
+    margin:3.5rem auto 0;
+    display:flex;
+    flex-direction:column;
+    gap:1.6rem;
+  }
+  .reading-card{
+    border-left:2px solid var(--gold);
+    background: rgba(232,227,216,0.03);
+    padding:1.4rem 1.6rem;
+    opacity:0;
+    transform:translateY(10px);
+    transition: all 0.6s ease;
+  }
+  .reading-card.show{ opacity:1; transform:translateY(0); }
+  .reading-card .rc-pos{
+    font-family:'Cinzel',serif;
+    font-size:0.65rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  .reading-card h4{
+    font-size:1.4rem;
+    margin-top:0.3rem;
+  }
+  .reading-card p{
+    margin-top:0.6rem;
+    color:var(--parchment-dim);
+    line-height:1.65;
+    font-size:1.02rem;
+  }
+
+  /* ===== GRIMOIRE (les 22 arcanes) ===== */
+  .grimoire-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(118px, 1fr));
+    gap:1rem;
+    margin-top:2.8rem;
+  }
+  .mini-card{
+    aspect-ratio:5/8;
+    border:1px solid var(--line);
+    background: linear-gradient(160deg, rgba(61,38,69,0.3), rgba(11,14,20,0.5));
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:0.7rem 0.4rem;
+    cursor:pointer;
+    transition: all 0.3s ease;
+    position:relative;
+  }
+  .mini-card:hover, .mini-card:focus-visible{
+    border-color:var(--gold);
+    transform:translateY(-4px);
+    background: linear-gradient(160deg, rgba(61,38,69,0.5), rgba(11,14,20,0.6));
+  }
+  .mini-card:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  .mini-card svg{ width:34px; height:34px; color:var(--gold); margin-bottom:0.5rem; }
+  .mini-card .mc-num{ font-family:'Cinzel',serif; font-size:0.6rem; color:var(--gold); letter-spacing:0.1em; }
+  .mini-card .mc-name{ font-family:'Cormorant Garamond',serif; font-size:0.88rem; font-weight:600; margin-top:0.2rem; line-height:1.15; }
+
+  /* ===== MODAL fiche carte ===== */
+  .modal-overlay{
+    position:fixed; inset:0;
+    background:rgba(6,8,16,0.82);
+    backdrop-filter: blur(3px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:1.5rem;
+    z-index:50;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.3s ease;
+  }
+  .modal-overlay.open{ opacity:1; pointer-events:auto; }
+  .modal-box{
+    max-width:520px;
+    width:100%;
+    background: linear-gradient(165deg, #181226, var(--night-deep));
+    border:1px solid var(--gold);
+    padding:2.4rem 2.2rem;
+    position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,0.6);
+    transform:translateY(20px) scale(0.97);
+    transition: transform 0.35s ease;
+  }
+  .modal-overlay.open .modal-box{ transform:translateY(0) scale(1); }
+  .modal-close{
+    position:absolute; top:1rem; right:1.2rem;
+    background:none; border:none;
+    color:var(--parchment-dim);
+    font-size:1.4rem;
+    cursor:pointer;
+    line-height:1;
+    transition:color 0.2s ease;
+  }
+  .modal-close:hover{ color:var(--gold); }
+  .modal-box svg{ width:64px; height:64px; color:var(--gold-bright); }
+  .modal-box .mc-num{ font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.18em; color:var(--gold); margin-top:1rem; }
+  .modal-box h3{ font-size:2rem; margin-top:0.3rem; }
+  .modal-box .meaning-row{ margin-top:1.4rem; }
+  .meaning-row .ml{
+    font-family:'Cinzel',serif;
+    font-size:0.65rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  .meaning-row p{ color:var(--parchment-dim); margin-top:0.4rem; line-height:1.6; }
+
+  /* ===== FOOTER ===== */
+  footer{
+    text-align:center;
+    padding:3rem 1.5rem 2.5rem;
+    color:var(--parchment-dim);
+    font-size:0.85rem;
+    font-style:italic;
+    position:relative; z-index:1;
+  }
+  footer .eyebrow{ display:block; margin-bottom:0.6rem; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <svg class="hero-ring" viewBox="0 0 100 100" fill="none">
+    <circle cx="50" cy="50" r="46" stroke="#D4AF6A" stroke-width="0.6" opacity="0.6"/>
+    <circle cx="50" cy="50" r="36" stroke="#D4AF6A" stroke-width="0.4" opacity="0.4"/>
+    <g stroke="#D4AF6A" stroke-width="0.6" opacity="0.8">
+      <path d="M50 14 L50 22 M50 78 L50 86 M14 50 L22 50 M78 50 L86 50"/>
+      <path d="M24 24 L29.5 29.5 M70.5 70.5 L76 76 M76 24 L70.5 29.5 M29.5 70.5 L24 76"/>
+    </g>
+    <circle cx="50" cy="50" r="4" fill="#E9CC8F"/>
+  </svg>
+  <h1>L'Oracolo degli <em>Arcani</em></h1>
+  <p>Un attimo di silenzio, una domanda sincera, e le carte parlano. Lascia che i tarocchi illuminino ciò che già porti dentro di te.</p>
+  <div class="hero-cta">
+    <a href="#paywall"><button class="btn primary">Consulta le carte</button></a>
+    <a href="#grimoire"><button class="btn">Sfoglia il grimorio</button></a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ PAYWALL ============ -->
+<section class="paywall" id="paywall">
+  <div class="section-head">
+    <span class="eyebrow">Accesso alla consultazione</span>
+    <h2>Scegli la tua formula</h2>
+    <p>La lettura delle carte e l'interpretazione sono riservate alle consultazioni a pagamento. Scegli l'opzione più adatta a te.</p>
+  </div>
+
+  <div class="offers">
+    <div class="offer-card">
+      <span class="offer-tag">A consultazione singola</span>
+      <h3>Una consultazione</h3>
+      <div class="offer-price">2,90&nbsp;€ <span>/ lettura</span></div>
+      <ul>
+        <li>Una lettura a scelta (1 o 3 carte)</li>
+        <li>Interpretazione completa</li>
+        <li>Accesso immediato dopo il pagamento</li>
+      </ul>
+      <button class="btn primary" id="payUnite">Paga una consultazione</button>
+    </div>
+
+    <div class="offer-card featured">
+      <span class="offer-tag">Abbonamento</span>
+      <h3>Accesso illimitato</h3>
+      <div class="offer-price">7,90&nbsp;€ <span>/ mese</span></div>
+      <ul>
+        <li>Letture illimitate, ogni giorno</li>
+        <li>Entrambi i tipi di lettura</li>
+        <li>Accesso al grimorio completo</li>
+        <li>Annullabile in qualsiasi momento</li>
+      </ul>
+      <button class="btn primary" id="payAbonnement">Abbonati</button>
+    </div>
+  </div>
+
+  <p class="access-error" id="payError" style="text-align:center;margin-top:1.5rem;"></p>
+</section>
+
+<div class="unlocked-banner" id="unlockedBanner">
+  <div class="unlocked-pill">✦ Accesso sbloccato — la tua consultazione è attiva ✦</div>
+</div>
+
+<!-- ============ CHOIX DU TIRAGE ============ -->
+<section class="section locked" id="tirage">
+  <div class="section-head">
+    <span class="eyebrow">Il rituale</span>
+    <h2>Scegli la tua lettura</h2>
+    <p>Ogni lettura risponde a un'intenzione diversa. Scegli quella che corrisponde alla tua domanda del momento.</p>
+  </div>
+
+  <div class="spreads">
+    <div class="spread-card" data-spread="1" tabindex="0" role="button" aria-pressed="false">
+      <span class="spread-num">Lettura singola</span>
+      <h3>La Carta del Giorno</h3>
+      <p>Una carta unica, estratta per illuminare la tua giornata o rispondere a una domanda precisa e diretta.</p>
+    </div>
+    <div class="spread-card" data-spread="3" tabindex="0" role="button" aria-pressed="false">
+      <span class="spread-num">Lettura in tre tempi</span>
+      <h3>Passato · Presente · Futuro</h3>
+      <p>Tre carte per capire da dove vieni, dove ti trovi ora, e cosa si sta preparando.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TABLE DE TIRAGE ============ -->
+<div class="table-felt locked" id="tableFelt">
+  <div class="ritual-prompt">
+    <span class="eyebrow">Prima di estrarre</span>
+    <h2>Poni la tua domanda</h2>
+    <p>Formulala nella tua mente, oppure scrivila qui sotto per concentrarti.</p>
+    <div class="question-input">
+      <label for="question">La tua domanda (facoltativa)</label>
+      <input type="text" id="question" placeholder="Es.: Cosa devo capire su questo periodo?">
+    </div>
+    <div class="draw-trigger">
+      <button class="btn primary" id="drawBtn">Estrai le carte</button>
+    </div>
+  </div>
+
+  <div class="cards-stage" id="cardsStage"></div>
+  <p class="tap-hint" id="tapHint">Tocca ogni carta per rivelarla</p>
+
+  <div class="reading" id="reading"></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============ GRIMOIRE ============ -->
+<section class="section" id="grimoire">
+  <div class="section-head">
+    <span class="eyebrow">Il grimorio</span>
+    <h2>I 22 arcani maggiori</h2>
+    <p>Ogni arcano porta un insegnamento. Tocca una carta per scoprirne il significato completo.</p>
+  </div>
+  <div class="grimoire-grid" id="grimoireGrid"></div>
+</section>
+
+<footer>
+  <span class="eyebrow">L'Oracolo degli Arcani</span>
+  Per la riflessione e l'introspezione — i tarocchi sono uno specchio, non una previsione immutabile.
+</footer>
+
+<!-- ============ MODAL ============ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modalClose" aria-label="Chiudi">&times;</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DONNÉES — 22 arcanes majeurs
+   Chaque carte a un glyphe SVG dessiné à la main (pas d'icon pack),
+   un nom, un numéro romain, des mots-clés, et un sens détaillé.
+============================================================ */
+
+const ARCANES = [
+  { n:0, roman:"0", name:"Il Matto", keywords:"Libertà, spensieratezza, nuovo inizio",
+    meaning:"Il Matto annuncia un salto nell'ignoto, affrontato con fiducia più che con temerarietà. È l'energia dell'inizio assoluto: una pagina bianca, un cammino tutto da inventare. Invita a fidarsi del movimento piuttosto che voler controllare tutto in anticipo.",
+    glyph:`<path d="M50 12 L50 30 M50 30 C38 30 32 40 38 50 C42 57 50 58 50 70 M50 70 L42 90 M50 70 L58 90 M38 50 L20 46 M62 50 L80 46" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"/><circle cx="50" cy="20" r="6" fill="currentColor"/>` },
+  { n:1, roman:"I", name:"Il Bagatto", keywords:"Volontà, abilità, partenza padroneggiata",
+    meaning:"Il Bagatto è colui che ha tutti gli strumenti sul suo tavolo ma deve ancora scegliere quale afferrare. Simboleggia il potenziale allo stato puro, la capacità di agire e trasformare un'idea in realtà concreta. È il momento di mobilitare le proprie risorse.",
+    glyph:`<rect x="30" y="60" width="40" height="6" rx="1" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="50" cy="30" r="12" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M50 42 L50 60 M38 64 L30 60 M62 64 L70 60 M44 64 L40 60 M56 64 L60 60" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>` },
+  { n:2, roman:"II", name:"La Papessa", keywords:"Intuizione, mistero, sapere interiore",
+    meaning:"La Papessa custodisce un sapere che non si rivela immediatamente. Invita alla pazienza, all'ascolto della propria intuizione piuttosto che all'azione precipitosa. Qualcosa deve ancora maturare in silenzio prima di rivelarsi.",
+    glyph:`<path d="M50 14 L50 86" stroke="currentColor" stroke-width="2"/><path d="M32 30 C32 50 32 60 50 70 C68 60 68 50 68 30" stroke="currentColor" stroke-width="2.2" fill="none"/><circle cx="50" cy="22" r="5" fill="currentColor"/><path d="M38 80 L62 80" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>` },
+  { n:3, roman:"III", name:"L'Imperatrice", keywords:"Abbondanza, fertilità, creatività",
+    meaning:"L'Imperatrice è l'energia nutriente e creativa che fa fiorire i progetti come la terra fa crescere i frutti. Parla di crescita naturale, sensualità e abbondanza materiale o affettiva che si instaura senza forzature.",
+    glyph:`<circle cx="50" cy="36" r="10" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M50 46 C30 56 30 78 50 86 C70 78 70 56 50 46Z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M40 64 Q50 58 60 64" stroke="currentColor" stroke-width="1.6" fill="none"/>` },
+  { n:4, roman:"IV", name:"L'Imperatore", keywords:"Autorità, struttura, stabilità",
+    meaning:"L'Imperatore stabilisce l'ordine dove regnava il caos. Rappresenta la struttura, le regole chiare, il quadro che permette di costruire in modo duraturo. È una carta di disciplina e autorità legittima, a volte rigida ma protettiva.",
+    glyph:`<rect x="34" y="40" width="32" height="36" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M34 40 L50 24 L66 40" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M44 76 L44 60 L56 60 L56 76" stroke="currentColor" stroke-width="2"/>` },
+  { n:5, roman:"V", name:"Il Papa", keywords:"Tradizione, insegnamento, consiglio",
+    meaning:"Il Papa trasmette una saggezza collaudata dal tempo. Evoca il bisogno di consiglio, di apprendimento presso un mentore, o il rispetto di un quadro morale e sociale consolidato. È una carta di trasmissione e guida.",
+    glyph:`<circle cx="50" cy="28" r="10" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M50 38 L50 50 M36 86 L36 58 C36 50 64 50 64 58 L64 86" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M40 50 L60 50" stroke="currentColor" stroke-width="2"/>` },
+  { n:6, roman:"VI", name:"Gli Amanti", keywords:"Scelta, unione, allineamento del cuore",
+    meaning:"Gli Amanti pongono una scelta decisiva davanti a voi, spesso guidata tanto dal cuore quanto dalla ragione. Evocano l'unione, l'alleanza, ma anche la necessità di scegliere una direzione restando fedeli ai propri valori profondi.",
+    glyph:`<path d="M30 40 C30 28 48 28 50 42 C52 28 70 28 70 40 C70 56 50 68 50 68 C50 68 30 56 30 40Z" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M50 68 L50 84" stroke="currentColor" stroke-width="2"/>` },
+  { n:7, roman:"VII", name:"Il Carro", keywords:"Volontà, vittoria, avanzata controllata",
+    meaning:"Le Chariot avance malgré des forces contraires, grâce à une volonté ferme qui garde le cap. C'est une carte de victoire obtenue par la détermination, l'ambition canalisée et la capacité à diriger des énergies opposées vers un même but.",
+    glyph:`<rect x="36" y="44" width="28" height="22" stroke="currentColor" stroke-width="2.2" fill="none"/><circle cx="38" cy="74" r="8" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="62" cy="74" r="8" stroke="currentColor" stroke-width="2" fill="none"/><path d="M50 44 L50 26 M42 32 L50 26 L58 32" stroke="currentColor" stroke-width="2" fill="none"/>` },
+  { n:8, roman:"VIII", name:"La Giustizia", keywords:"Equilibrio, verità, conseguenze",
+    meaning:"La Giustizia ricorda che ogni azione porta la sua conseguenza. Invita alla lucidità, a soppesare onestamente i fatti prima di decidere. È una carta di equità: ciò che è stato seminato finisce per essere raccolto, nel bene come nel male.",
+    glyph:`<path d="M50 18 L50 82" stroke="currentColor" stroke-width="2"/><path d="M28 32 L72 32" stroke="currentColor" stroke-width="2.2"/><path d="M28 32 L20 48 L36 48 Z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M72 32 L64 48 L80 48 Z" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M40 82 L60 82" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>` },
+  { n:9, roman:"IX", name:"L'Eremita", keywords:"Introspezione, saggezza, solitudine scelta",
+    meaning:"L'Eremita si allontana dal rumore per ascoltarsi meglio. Simboleggia un tempo di ritiro necessario, una ricerca di senso condotta in solitudine. La sua lanterna non illumina lontano, ma illumina giusto — passo dopo passo.",
+    glyph:`<path d="M50 20 C40 20 36 32 42 40 C32 46 30 70 50 78 C70 70 68 46 58 40 C64 32 60 20 50 20Z" stroke="currentColor" stroke-width="2.2" fill="none"/><circle cx="50" cy="34" r="4" fill="currentColor"/>` },
+  { n:10, roman:"X", name:"La Ruota della Fortuna", keywords:"Ciclo, cambiamento, destino in movimento",
+    meaning:"La Ruota gira, e nulla resta fermo per sempre. Annuncia un cambiamento di ciclo, a volte improvviso, che sfugge in parte al nostro controllo. Ciò che saliva ridiscende, ciò che era basso può risalire: è il movimento stesso della vita.",
+    glyph:`<circle cx="50" cy="50" r="26" stroke="currentColor" stroke-width="2.2" fill="none"/><circle cx="50" cy="50" r="4" fill="currentColor"/><path d="M50 24 L50 16 M50 84 L50 76 M24 50 L16 50 M84 50 L76 50" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M32 32 L26 26 M68 32 L74 26 M32 68 L26 74 M68 68 L74 74" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>` },
+  { n:11, roman:"XI", name:"La Forza", keywords:"Coraggio interiore, dolcezza, padronanza di sé",
+    meaning:"La Forza non si impone con la violenza ma con una dolcezza tenace. Evoca la capacità di placare ciò che è selvaggio in noi — paure, rabbie, istinti — non con la repressione, ma con una presenza calma e fiduciosa.",
+    glyph:`<path d="M30 60 C30 42 70 42 70 60 C70 76 30 76 30 60Z" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M44 50 C40 44 36 44 34 48" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M50 30 L50 42" stroke="currentColor" stroke-width="2"/>` },
+  { n:12, roman:"XII", name:"L'Appeso", keywords:"Pausa, lasciar andare, altro punto di vista",
+    meaning:"L'Appeso è immobile, ma questa immobilità non è un fallimento: è una sospensione volontaria che apre un altro sguardo sulle cose. Invita a mollare la resistenza, ad accettare un tempo di attesa che finirà per dare i suoi frutti.",
+    glyph:`<path d="M30 24 L70 24" stroke="currentColor" stroke-width="2.2"/><path d="M50 24 L50 50" stroke="currentColor" stroke-width="2"/><path d="M50 50 C36 50 36 78 50 80 C64 78 64 50 50 50Z" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M40 60 L34 70 M60 60 L66 70" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>` },
+  { n:13, roman:"XIII", name:"L'Arcano Senza Nome", keywords:"Trasformazione, fine di un ciclo, rinascita",
+    meaning:"Questa carta non porta un nome perché ciò che annuncia non si nomina facilmente: una fine necessaria affinché un'altra cosa possa nascere. Niente di letteralmente funesto — è l'immagine di una trasformazione profonda, a volte radicale, sempre liberatoria alla fine.",
+    glyph:`<path d="M30 70 L70 30" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M30 30 L70 70" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" opacity="0.4"/><circle cx="50" cy="50" r="22" stroke="currentColor" stroke-width="1.4" fill="none" opacity="0.5"/>` },
+  { n:14, roman:"XIV", name:"La Temperanza", keywords:"Equilibrio, pazienza, armonia degli opposti",
+    meaning:"La Temperanza mescola con cura due elementi opposti per creare qualcosa di nuovo e armonioso. Parla di giusta misura, di pazienza nel processo, e della capacità di far coesistere forze che sembravano incompatibili.",
+    glyph:`<path d="M34 26 L34 60 C34 72 66 72 66 60 L66 26" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M30 40 C40 34 60 46 70 40" stroke="currentColor" stroke-width="2" fill="none"/><path d="M44 80 L56 80" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>` },
+  { n:15, roman:"XV", name:"Il Diavolo", keywords:"Attaccamento, ombra, desideri non esaminati",
+    meaning:"Il Diavolo mostra le catene che si è finito per trovare confortevoli. Evoca le dipendenze, gli schemi ripetitivi o i desideri che portano dove in realtà non si voleva andare. La presa di coscienza è già il primo passo fuori dalla morsa.",
+    glyph:`<path d="M38 30 L34 18 M62 30 L66 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="50" cy="42" r="16" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M40 80 C40 66 60 66 60 80" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="44" cy="40" r="2" fill="currentColor"/><circle cx="56" cy="40" r="2" fill="currentColor"/>` },
+  { n:16, roman:"XVI", name:"La Torre", keywords:"Rottura, rivelazione improvvisa, verità che esplode",
+    meaning:"La Torre crolla all'improvviso, rivelando che le sue fondamenta non erano solide come si credeva. Brutale in apparenza, questa carta è spesso una liberazione: distrugge ciò che era costruito su false certezze per permettere di ricostruire in modo più giusto.",
+    glyph:`<path d="M30 80 L30 40 L50 22 L70 40 L70 80Z" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M38 80 L62 30 M62 80 L40 36" stroke="currentColor" stroke-width="1.8" opacity="0.7"/><path d="M50 14 L46 24 L54 24 Z" fill="currentColor"/>` },
+  { n:17, roman:"XVII", name:"La Stella", keywords:"Speranza, ispirazione, fiducia ritrovata",
+    meaning:"Dopo la tempesta, la Stella porta una calma serena. Simboleggia la speranza che ritorna, la fiducia nel futuro, l'ispirazione ritrovata dopo un periodo difficile. È una carta di guarigione dolce e di luce che guida senza abbagliare.",
+    glyph:`<path d="M50 16 L54 34 L72 34 L58 45 L63 63 L50 52 L37 63 L42 45 L28 34 L46 34Z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M30 78 C40 72 60 72 70 78" stroke="currentColor" stroke-width="1.6" fill="none" opacity="0.6"/>` },
+  { n:18, roman:"XVIII", name:"La Luna", keywords:"Illusione, intuizione, zone d'ombra",
+    meaning:"La Luna illumina debolmente un cammino incerto, dove le forme si confondono e l'immaginazione può ingannare quanto illuminare. Invita a diffidare delle illusioni, delle paure irrazionali, restando comunque in ascolto della propria intuizione profonda.",
+    glyph:`<path d="M58 22 C44 26 36 38 36 52 C36 68 50 80 66 78 C52 78 42 66 42 52 C42 38 48 28 58 22Z" stroke="currentColor" stroke-width="2.2" fill="none"/><circle cx="30" cy="70" r="2" fill="currentColor"/><circle cx="74" cy="60" r="1.6" fill="currentColor"/>` },
+  { n:19, roman:"XIX", name:"Il Sole", keywords:"Gioia, chiarezza, successo pieno",
+    meaning:"Il Sole dissipa ogni dubbio. È una carta di gioia schietta, di successo visibile e di vitalità ritrovata. Ciò che era nascosto diventa chiaro, ciò che era difficile diventa semplice. Si annuncia un periodo di felicità e di pienezza.",
+    glyph:`<circle cx="50" cy="50" r="16" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M50 18 L50 26 M50 74 L50 82 M18 50 L26 50 M74 50 L82 50 M27 27 L33 33 M67 67 L73 73 M73 27 L67 33 M33 67 L27 73" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>` },
+  { n:20, roman:"XX", name:"Il Giudizio", keywords:"Risveglio, bilancio, richiamo interiore",
+    meaning:"Il Giudizio suona come un richiamo che non si può più ignorare. Invita a fare un bilancio onesto di un periodo, a rispondere a una presa di coscienza profonda, e ad alzarsi per diventare pienamente ciò che si è chiamati a essere.",
+    glyph:`<path d="M50 18 C44 18 42 26 46 30 C40 34 40 44 50 44 C60 44 60 34 54 30 C58 26 56 18 50 18Z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M34 80 L34 60 C34 50 66 50 66 60 L66 80" stroke="currentColor" stroke-width="2.2" fill="none"/>` },
+  { n:21, roman:"XXI", name:"Il Mondo", keywords:"Compimento, totalità, ciclo concluso",
+    meaning:"Il Mondo segna il culmine di un lungo cammino. Tutto ciò che doveva assemblarsi trova finalmente il suo posto. È una carta di pienezza, di successo globale e di armonia ritrovata — la fine di un ciclo che ne annuncia uno nuovo, più vasto.",
+    glyph:`<ellipse cx="50" cy="50" rx="26" ry="20" stroke="currentColor" stroke-width="2.2" fill="none"/><path d="M50 30 C40 38 40 62 50 70 C60 62 60 38 50 30Z" stroke="currentColor" stroke-width="1.6" fill="none" opacity="0.7"/><path d="M24 50 L76 50" stroke="currentColor" stroke-width="1.4" opacity="0.5"/>` },
+];
+
+const SPREAD_LABELS_3 = ["Passato","Presente","Futuro"];
+
+/* ============================================================
+   RENDU DU GRIMOIRE
+============================================================ */
+const grimoireGrid = document.getElementById('grimoireGrid');
+ARCANES.forEach(card => {
+  const el = document.createElement('div');
+  el.className = 'mini-card';
+  el.tabIndex = 0;
+  el.setAttribute('role','button');
+  el.setAttribute('aria-label', `Voir la signification de ${card.name}`);
+  el.innerHTML = `
+    <svg viewBox="0 0 100 100" fill="none">${card.glyph}</svg>
+    <span class="mc-num">${card.roman}</span>
+    <span class="mc-name">${card.name}</span>
+  `;
+  el.addEventListener('click', () => openModal(card));
+  el.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openModal(card); } });
+  grimoireGrid.appendChild(el);
+});
+
+/* ============================================================
+   MODAL
+============================================================ */
+const modalOverlay = document.getElementById('modalOverlay');
+const modalContent = document.getElementById('modalContent');
+const modalClose = document.getElementById('modalClose');
+
+function openModal(card){
+  modalContent.innerHTML = `
+    <svg viewBox="0 0 100 100" fill="none">${card.glyph}</svg>
+    <div class="mc-num">ARCANO ${card.roman}</div>
+    <h3>${card.name}</h3>
+    <div class="meaning-row">
+      <div class="ml">Parole chiave</div>
+      <p>${card.keywords}</p>
+    </div>
+    <div class="meaning-row">
+      <div class="ml">Significato</div>
+      <p>${card.meaning}</p>
+    </div>
+  `;
+  modalOverlay.classList.add('open');
+  modalClose.focus();
+}
+function closeModal(){ modalOverlay.classList.remove('open'); }
+modalClose.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', e => { if(e.target === modalOverlay) closeModal(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+/* ============================================================
+   CHOIX DU TIRAGE
+============================================================ */
+let currentSpread = 1;
+const spreadCards = document.querySelectorAll('.spread-card');
+spreadCards.forEach(sc => {
+  sc.addEventListener('click', () => selectSpread(sc));
+  sc.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' '){ e.preventDefault(); selectSpread(sc); } });
+});
+function selectSpread(sc){
+  spreadCards.forEach(c => { c.classList.remove('active'); c.setAttribute('aria-pressed','false'); });
+  sc.classList.add('active');
+  sc.setAttribute('aria-pressed','true');
+  currentSpread = parseInt(sc.dataset.spread, 10);
+}
+// default selection
+selectSpread(spreadCards[0]);
+
+/* ============================================================
+   TIRAGE DES CARTES
+============================================================ */
+const cardsStage = document.getElementById('cardsStage');
+const readingEl = document.getElementById('reading');
+const tapHint = document.getElementById('tapHint');
+const drawBtn = document.getElementById('drawBtn');
+
+function shuffleDraw(count){
+  const pool = [...ARCANES];
+  const drawn = [];
+  for(let i=0; i<count; i++){
+    const idx = Math.floor(Math.random() * pool.length);
+    drawn.push(pool.splice(idx,1)[0]);
+  }
+  return drawn;
+}
+
+drawBtn.addEventListener('click', () => {
+  const count = currentSpread;
+  const drawn = shuffleDraw(count);
+  cardsStage.innerHTML = '';
+  readingEl.innerHTML = '';
+  tapHint.classList.remove('show');
+
+  drawn.forEach((card, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'card-slot';
+
+    const label = document.createElement('span');
+    label.className = 'card-position-label';
+    label.textContent = count === 3 ? SPREAD_LABELS_3[i] : 'La tua carta';
+    slot.appendChild(label);
+
+    const cardEl = document.createElement('div');
+    cardEl.className = 'tarot-card';
+    cardEl.innerHTML = `
+      <div class="card-inner">
+        <div class="card-face card-back">
+          <svg class="sigil" viewBox="0 0 100 100" fill="none">
+            <circle cx="50" cy="50" r="32" stroke="#D4AF6A" stroke-width="1.4"/>
+            <circle cx="50" cy="50" r="3" fill="#D4AF6A"/>
+            <path d="M50 18 L50 30 M50 70 L50 82 M18 50 L30 50 M70 50 L82 50" stroke="#D4AF6A" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <div class="card-face card-front">
+          <div class="frame-line"></div>
+          <svg class="card-glyph" viewBox="0 0 100 100" fill="none">${card.glyph}</svg>
+          <div class="card-num">ARCANO ${card.roman}</div>
+          <div class="card-name">${card.name}</div>
+          <div class="card-keywords">${card.keywords}</div>
+        </div>
+      </div>
+    `;
+    slot.appendChild(cardEl);
+    cardsStage.appendChild(slot);
+
+    // deal animation, staggered
+    setTimeout(() => {
+      cardEl.classList.add('dealt');
+      label.classList.add('show');
+    }, i * 220);
+
+    // click to reveal
+    cardEl.querySelector('.card-inner').addEventListener('click', () => {
+      if(cardEl.classList.contains('revealed')) return;
+      cardEl.classList.add('revealed');
+      revealReading(card, i, count);
+    });
+  });
+
+  setTimeout(() => tapHint.classList.add('show'), count * 220 + 300);
+});
+
+function revealReading(card, index, total){
+  const block = document.createElement('div');
+  block.className = 'reading-card';
+  const posLabel = total === 3 ? SPREAD_LABELS_3[index] : 'La tua carta';
+  block.innerHTML = `
+    <div class="rc-pos">${posLabel} — Arcano ${card.roman}</div>
+    <h4>${card.name}</h4>
+    <p>${card.meaning}</p>
+  `;
+  // insert in correct order based on index
+  const existing = readingEl.children;
+  if(index >= existing.length){
+    readingEl.appendChild(block);
+  } else {
+    readingEl.insertBefore(block, existing[index]);
+  }
+  requestAnimationFrame(() => block.classList.add('show'));
+
+  if(readingEl.children.length === total){
+    setTimeout(() => {
+      readingEl.scrollIntoView({ behavior:'smooth', block:'center' });
+    }, 200);
+  }
+}
+
+/* ============================================================
+   PAYWALL — connecté au serveur Stripe
+   ------------------------------------------------------------
+   Quand on clique "Payer", on demande au serveur de créer une
+   session Stripe, puis on redirige l'utilisateur vers la page
+   de paiement Stripe. Une fois payé, Stripe nous renvoie ici
+   avec un identifiant de session qu'on vérifie auprès du serveur.
+============================================================ */
+
+const paywall = document.getElementById('paywall');
+const tirageSection = document.getElementById('tirage');
+const tableFelt = document.getElementById('tableFelt');
+const unlockedBanner = document.getElementById('unlockedBanner');
+const payUniteBtn = document.getElementById('payUnite');
+const payAbonnementBtn = document.getElementById('payAbonnement');
+const payError = document.getElementById('payError');
+
+function unlockConsultation(){
+  tirageSection.classList.remove('locked');
+  tableFelt.classList.remove('locked');
+  unlockedBanner.classList.add('show');
+  paywall.style.display = 'none';
+  sessionStorage.setItem('oracle_unlocked', '1');
+  tirageSection.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+async function lancerPaiement(offre){
+  payError.textContent = '';
+  try {
+    const reponse = await fetch('/creer-paiement', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ offre })
+    });
+    const data = await reponse.json();
+    if(data.url){
+      window.location.href = data.url; // redirige vers la page de paiement Stripe
+    } else {
+      payError.textContent = "Si è verificato un errore. Riprova tra un momento.";
+    }
+  } catch (err) {
+    payError.textContent = "Impossibile contattare il server di pagamento.";
+  }
+}
+
+payUniteBtn.addEventListener('click', () => lancerPaiement('unite'));
+payAbonnementBtn.addEventListener('click', () => lancerPaiement('abonnement'));
+
+// Au chargement de la page, on vérifie si on revient d'un paiement Stripe
+async function verifierRetourPaiement(){
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get('session_id');
+
+  if(sessionId){
+    try {
+      const reponse = await fetch(`/verifier-paiement/${sessionId}`);
+      const data = await reponse.json();
+      if(data.paye){
+        unlockConsultation();
+      } else {
+        payError.textContent = "Il pagamento non è stato confermato. Contattaci se l'importo è stato addebitato.";
+      }
+    } catch (err) {
+      payError.textContent = "Impossibile verificare il pagamento.";
+    }
+    // Nettoie l'URL pour ne pas garder le session_id affiché
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else if(sessionStorage.getItem('oracle_unlocked') === '1'){
+    // Rimane sbloccato durante la sessione del browser
+    unlockConsultation();
+  }
+}
+
+verifierRetourPaiement();
+</script>
+</body>
+</html>
