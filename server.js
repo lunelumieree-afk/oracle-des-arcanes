@@ -28,11 +28,11 @@ const SITE_URL = process.env.SITE_URL || 'http://localhost:3000';
 
 // ------------------------------------------------------------
 // Prix : à ajuster si vous changez vos tarifs.
-// Les montants sont en centimes (290 = 2,90 €).
+// Les montants sont en centimes (3900 = 39,00 €).
 // ------------------------------------------------------------
 const PRICES = {
-  unite: { amount: 290, label: 'Consultation à l\'unité' },
-  abonnement: { amount: 790, label: 'Abonnement mensuel' }
+  unite: { amount: 3900, label: 'Consultation à l\'unité' },
+  abonnement: { amount: 5500, label: 'Abonnement mensuel' }
 };
 
 // ------------------------------------------------------------
