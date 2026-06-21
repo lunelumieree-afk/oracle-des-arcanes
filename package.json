@@ -1,0 +1,13 @@
+{
+  "name": "oracle-des-arcanes-serveur",
+  "version": "1.0.0",
+  "description": "Serveur qui gère les paiements Stripe pour L'Oracle des Arcanes",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "stripe": "^16.0.0"
+  }
+}
